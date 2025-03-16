@@ -1,15 +1,24 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 const AuthContext = createContext({})
 
-const memorySession = {
-  user: 'cuadrosc99@gmail.com',
-  authenticate: true,
-  token: Date.now()
+export const statesAuth = {
+  'NO-AUTHENTICATE': 'NO-AUTHENTICATE',
+  'AUTHENTICATE-PENDING': 'AUTHENTICATE-PENDING',
+  'AUTHENTICATE': 'AUTHENTICATE',
 }
 
 export function AuthProvider({ children }) {
-  const [session, setSession] = useState(memorySession)
+  const [session, setSession] = useState({})
+
+  useEffect(function() {
+    if (localStorage.getItem('session')) {
+      setSession(JSON.parse(localStorage.getItem('session')))
+    } else {
+      setSession({})
+    }
+  }, []) 
+
   return (
     <AuthContext.Provider value={{
       session,
