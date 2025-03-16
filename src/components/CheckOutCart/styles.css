@@ -3,3 +3,21 @@
     height: calc(100vh - 80px);
     top: 80px;
 }
+
+.product-check::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.product-check::-webkit-scrollbar:vertical {
+    width:5px;
+}
+
+.product-check::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 10px;
+    border: 1px solid #797979;
+}
+
+.product-check::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}
