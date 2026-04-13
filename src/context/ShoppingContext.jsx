@@ -24,18 +24,16 @@ export function ShoppingProvider({ children }) {
   const openProductDetail = () => setIsProductDetailOpen(true)
   const closeProductDetail = () => setIsProductDetailOpen(false)
 
-  async function fetchProducts() {
+  async function fetchProducts(signal) {
     try {
-      const response = await api.getProducts(`/products?limit=${28}&offset=${1}`)
-      if (response.ok) {
-        const data = await response.json()
-        setProducts(data)
-        setStatus('success')
-      } else {
-        setProducts([])
-      }
+      const data = await api.getProducts(`/products?limit=28&offset=1`, signal)
+      setProducts(data)
+      setStatus('success')
     } catch (e) {
-      setStatus('error')
+      if (e.name !== 'AbortError') {
+        setProducts([])
+        setStatus('error')
+      }
     }
   }
 
@@ -94,7 +92,7 @@ export function ShoppingProvider({ children }) {
 
   useEffect(() => {
     const abortController = new AbortController()
-    fetchProducts().then(() => {})
+    fetchProducts(abortController.signal)
     return () => abortController.abort()
   }, [])
 
@@ -102,7 +100,7 @@ export function ShoppingProvider({ children }) {
     if (searchInput && searchByCategory)
       setFilterItems(
         filterBy(
-          'BY_TITLE_AND_CATEGORY',
+          'BY_CATEGORY_AND_CATEGORY',
           products,
           searchInput,
           searchByCategory

@@ -1,76 +1,84 @@
 import { useState, useEffect } from 'react'
 import Toastify from 'toastify-js'
 
+const CART_STORAGE_KEY = 'shoppy_cart'
+
+function loadCartFromStorage() {
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch {
+    return []
+  }
+}
+
 export default function useShoppingCart() {
-  const [cartProducts, setCartProducts] = useState([])
-  const [quantityItemsCart, setQuantityItemsCart] = useState(0)
+  const [cartProducts, setCartProducts] = useState(() => loadCartFromStorage())
   const [isCheckOutCart, setIsCheckOutCart] = useState(false)
   const openCartDetail = () => setIsCheckOutCart(true)
   const closeCartDetail = () => setIsCheckOutCart(false)
+
+  // Derived quantity — always in sync with cartProducts
+  const quantityItemsCart = cartProducts.reduce((sum, item) => sum + item.quantity, 0)
+
+  // Persist cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartProducts))
+  }, [cartProducts])
 
   function addToCart(event, product = {}) {
     event.stopPropagation()
     openCartDetail()
     if (cartProducts.some((item) => item.id === product.id)) {
-      let updateProductCarts = [...cartProducts]
-      updateProductCarts = updateProductCarts.map(function(item) {
-        return (item.id === product.id) ?
-          { ...item, quantity: item.quantity + 1 } : item
-      })
-      setCartProducts(updateProductCarts)
+      setCartProducts((prev) =>
+        prev.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      )
       Toastify({
         text: "Product added",
         duration: 1000,
-        style: { background: "#00D330"}
-      }).showToast();
+        style: { background: "#00D330" },
+      }).showToast()
       return
     }
 
-    setQuantityItemsCart((countPrev) => ++countPrev)
-    setCartProducts([...cartProducts, { ...product, quantity: 1 }])
+    setCartProducts((prev) => [...prev, { ...product, quantity: 1 }])
     Toastify({
-      text: "Product add successfully",
+      text: "Product added successfully",
       duration: 1000,
-      style: { background: "#00D330"}
-    }).showToast();
+      style: { background: "#00D330" },
+    }).showToast()
   }
 
   function removeToCart(key, id) {
-    let removeProductCarts = [...cartProducts]
-    removeProductCarts = removeProductCarts.filter(function(item) {
-      return item.id !== id
-    })
-    setQuantityItemsCart((prev) => --prev)
-    setCartProducts(removeProductCarts)
+    setCartProducts((prev) => prev.filter((item) => item.id !== id))
   }
 
   function increaseQuantity(key) {
-    const currentProducts = [...cartProducts]
-    currentProducts[key].quantity++
-    setCartProducts(currentProducts)
+    setCartProducts((prev) =>
+      prev.map((item, i) => (i === key ? { ...item, quantity: item.quantity + 1 } : item))
+    )
   }
 
   function decreaseQuantity(key) {
-    const currentProducts = [...cartProducts]
-    if (currentProducts[key].quantity === 0) return
-    currentProducts[key].quantity--
-    setCartProducts(currentProducts)
+    setCartProducts((prev) =>
+      prev.map((item, i) =>
+        i === key && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+      )
+    )
   }
 
   function totalProductPrice() {
-    return cartProducts.reduce(function (totalPrice, currentProduct) {
+    return cartProducts.reduce((totalPrice, currentProduct) => {
       return totalPrice + currentProduct.price * currentProduct.quantity
     }, 0)
   }
 
   function cleanCart() {
-    setQuantityItemsCart(0)
     setCartProducts([])
+    localStorage.removeItem(CART_STORAGE_KEY)
   }
-
-  useEffect(() => {
-    totalProductPrice()
-  }, [cartProducts])
 
   return {
     cartProducts,

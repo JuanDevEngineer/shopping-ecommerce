@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "fullname": "Admin User",
+      "email": "admin@shoppy.com",
+      "password": "admin123",
+      "role": "admin",
+      "phone": "+1 555-000-0001",
+      "address": "123 Main St, San Francisco, CA",
+      "avatar": null,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "fullname": "John Doe",
+      "email": "user@shoppy.com",
+      "password": "user123",
+      "role": "user",
+      "phone": "+1 555-000-0002",
+      "address": "456 Oak Ave, New York, NY",
+      "avatar": null,
+      "createdAt": "2024-01-15T00:00:00.000Z"
+    }
+  ]
+}

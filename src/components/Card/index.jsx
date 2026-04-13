@@ -28,7 +28,6 @@ export function Card({ item }) {
         <img
           className='w-full h-full object-cover rounded-t-lg'
           src={ item?.images[0] || defaultImage }
-          // src={defaultImage}
           alt='Headphones'
         />
         <button className={ cn(
@@ -40,7 +39,6 @@ export function Card({ item }) {
           } }
         >
           { renderIcon(item.id) }
-          {/* <PlusIcon className="h-6 w-6 text-black dark:text-white"/> */ }
         </button>
       </figure>
       <p className='flex justify-between px-2'>

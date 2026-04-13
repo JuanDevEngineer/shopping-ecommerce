@@ -1,7 +1,10 @@
 {
   "name": "shoppy-ecommerce",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A modern e-commerce SPA built with React, Vite and Tailwind CSS. Features product listing, search, category filtering, shopping cart with persistence, order history and dark mode.",
+  "author": "",
+  "keywords": ["ecommerce", "react", "vite", "tailwindcss", "shopping-cart"],
   "type": "module",
   "scripts": {
     "dev": "vite",

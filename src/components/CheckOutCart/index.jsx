@@ -52,7 +52,7 @@ export function CheckOutCart() {
       {cartProducts.length === 0 ? (
         <div className="px-6 h-3/4">
           <span className="flex justify-center items-center h-3/4 dark:text-white">
-            No hay products en el cart
+            Your cart is empty
           </span>
         </div>
       ) : (
@@ -78,9 +78,9 @@ export function CheckOutCart() {
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold dark:text-white">Subtotal: </p>{' '}
           <span className="text-md font-semibold dark:text-white">
-            {new Intl.NumberFormat('es-CO', {
+            {new Intl.NumberFormat('en-US', {
               style: 'currency',
-              currency: 'COP',
+              currency: 'USD',
             }).format(totalProductPrice())}
           </span>
         </div>
@@ -88,9 +88,9 @@ export function CheckOutCart() {
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold dark:text-white">Total + iva: </p>{' '}
           <span className="text-md font-semibold dark:text-white">
-            {new Intl.NumberFormat('es-CO', {
+            {new Intl.NumberFormat('en-US', {
               style: 'currency',
-              currency: 'COP',
+              currency: 'USD',
             }).format(parseFloat(totalProductPrice() * iva))}
           </span>
         </div>

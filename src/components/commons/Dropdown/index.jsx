@@ -5,15 +5,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../../../hooks/useAuth'
 
 export function Dropdown({ list, session }) {
-  const { setSession } = useAuth()
+  const { logout } = useAuth()
   const navigate = useNavigate()
 
   function handleLogout() {
-    if (localStorage.getItem('session')) {
-      localStorage.removeItem('session')
-      navigate('/sign-in', { replace: true })
-      setSession({})
-    }
+    logout()
+    navigate('/sign-in', { replace: true })
   }
 
   return (
